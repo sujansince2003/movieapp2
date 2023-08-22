@@ -73,8 +73,6 @@ const App = () => {
         </Box>
       </Main> */}
       <StarRating maxRating={5} />
-      <StarRating maxRating={10} />
-      <StarRating />
     </>
   );
 };
