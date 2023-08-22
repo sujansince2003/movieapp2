@@ -10,34 +10,36 @@ const StarContainerStyle=
     display:"flex",
  
 }
-const textStyle=
-{
-    lineHeight:"1",
-    margin:"0"
-}
 
 
-const starStyle=
-{
-width:"48px",
-height:"48px",
-display:"block",
-cursor:"pointer"
-}
 
- const StarRating = ({maxRating=5}) => {
+ const StarRating = ({maxRating=5,color="rgb(208, 208, 93)",size=48,className=""}) => {
     const [rating,setRating]=useState(1)
     const [tempRating,settempRating]=useState(0)
     function Handlerating(rating)
     {
         setRating(rating);
     }
+    const textStyle=
+    {
+        lineHeight:"1",
+        margin:"0",
+        // color:`${color}`,
+        color:"black",
+        fontSize:`${size/2}px`,
 
+
+
+        
+
+    }
+    
+    
     
     return (
         <div style={ContainerStyle}>
 
-          <div style={StarContainerStyle} >
+          <div style={StarContainerStyle} className={className} >
              {
                 Array.from({length:maxRating},(_,i)=>(
                 <Star key={i} 
@@ -45,6 +47,8 @@ cursor:"pointer"
                 full={tempRating?  tempRating>=i+1:rating>=i+1} 
                 onHoverin={()=>settempRating(i+1)}
                 onHoverout={()=>settempRating(0)}
+                color={color}
+                size={size}
 
 
                 
@@ -60,8 +64,16 @@ cursor:"pointer"
  
 export default StarRating;
 
-const Star=({onRate,full,onHoverin,onHoverout})=>
+const Star=({onRate,full,onHoverin,onHoverout,color,size})=>
 {
+
+    const starStyle=
+{
+width:`${size}px`,
+height:`${size}px`,
+display:"block",
+cursor:"pointer"
+}
     return(
         <span role="button" style={starStyle} 
         onClick={onRate} 
@@ -76,8 +88,8 @@ const Star=({onRate,full,onHoverin,onHoverout})=>
              <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
-            fill="#000"
-            stroke="#000"
+            fill={color}
+            stroke={color}
           >
             <path
               d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
@@ -87,7 +99,7 @@ const Star=({onRate,full,onHoverin,onHoverout})=>
   xmlns="http://www.w3.org/2000/svg"
   fill="none"
   viewBox="0 0 24 24"
-  stroke="#000"
+  stroke={color}
 >
   <path
     strokeLinecap="round"
