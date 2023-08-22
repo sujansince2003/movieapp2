@@ -1,4 +1,10 @@
 import React, { Component, useState } from 'react';
+import PropTypes  from 'prop-types';
+
+
+
+
+
 const ContainerStyle=
 {
     display:"flex",
@@ -13,8 +19,14 @@ const StarContainerStyle=
 
 
 
- const StarRating = ({maxRating=5,color="rgb(208, 208, 93)",size=48,className=""}) => {
-    const [rating,setRating]=useState(1)
+ const StarRating = ({
+    maxRating=5,
+    color="rgb(208, 208, 93)",
+    size=48,className="",
+    messages=[],
+    defaultRating=0
+}) => {
+    const [rating,setRating]=useState(defaultRating)
     const [tempRating,settempRating]=useState(0)
     function Handlerating(rating)
     {
@@ -57,9 +69,13 @@ const StarContainerStyle=
                 ))
              }
            </div>
-           <p style={textStyle}>{tempRating|| rating || " "}</p>
+           <p style={textStyle}>{messages.length===maxRating ?(tempRating? messages[tempRating-1]:messages[rating-1]): tempRating|| rating || " "}</p>
         </div> 
     );
+}
+StarRating.propTypes=
+{
+    maxRating:PropTypes.number
 }
  
 export default StarRating;

@@ -72,7 +72,11 @@ const App = () => {
           <WatchedList watched={watched} />
         </Box>
       </Main> */}
-      <StarRating maxRating={5} />
+      <StarRating
+        maxRating={5}
+        messages={["Poor", "average", "good", "best", "outstanding"]}
+      />
+      <StarRating maxRating={4} defaultRating={3} />
     </>
   );
 };
