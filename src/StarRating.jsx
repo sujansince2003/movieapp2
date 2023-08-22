@@ -95,10 +95,7 @@ cursor:"pointer"
         onClick={onRate} 
         onMouseEnter={onHoverin}
         onMouseLeave={onHoverout}
-        
-        
-        
-        >
+>
          {
             full? 
              <svg
