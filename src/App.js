@@ -57,7 +57,7 @@ const App = () => {
 
   return (
     <>
-      <NavBar>
+      {/* <NavBar>
         <Logo />
         <Search />
         <NumResults movies={movies} />
@@ -71,7 +71,10 @@ const App = () => {
 
           <WatchedList watched={watched} />
         </Box>
-      </Main>
+      </Main> */}
+      <StarRating maxRating={5} />
+      <StarRating maxRating={10} />
+      <StarRating />
     </>
   );
 };
