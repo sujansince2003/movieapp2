@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 import Show from "./Show";
 
@@ -52,33 +52,45 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const API_URL = "https://www.omdbapi.com/?apikey=35f704b1";
 const App = () => {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const searchMovies = async (title = "interstellar") => {
+    setIsLoading(true);
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json();
+    setMovies(data.Search);
+    setIsLoading(false);
+    console.log(data.Search);
+  };
+  useEffect(() => searchMovies, []);
 
   return (
     <>
-      {/* <NavBar>
+      <NavBar>
         <Logo />
         <Search />
         <NumResults movies={movies} />
       </NavBar>
       <Main movies={movies}>
         <Box movies={movies}>
-          <MovieList movies={movies} />
+          {isLoading ? <Loader /> : <MovieList movies={movies} />}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
 
           <WatchedList watched={watched} />
         </Box>
-      </Main> */}
-      <StarRating
+      </Main>
+      {/* <StarRating
         maxRating={5}
         messages={["Poor", "average", "good", "best", "outstanding"]}
       />
       <StarRating maxRating={4} defaultRating={3} />
-      <Show />
+      <Show /> */}
     </>
   );
 };
@@ -128,6 +140,12 @@ const NumResults = ({ movies }) => {
   );
 };
 
+//loader
+
+const Loader = () => {
+  return <p className="loader">Loading....</p>;
+};
+
 //main
 const Main = ({ children }) => {
   return <main className="main">{children}</main>;
@@ -152,7 +170,7 @@ const MovieList = ({ movies }) => {
   return (
     <ul className="list">
       {movies?.map((movie) => (
-        <Movie movie={movie} />
+        <Movie movie={movie} key={movie.imdbID} />
       ))}
     </ul>
   );
@@ -243,7 +261,7 @@ const WatchedList = ({ watched }) => {
     <>
       <ul className="list">
         {watched.map((movie) => (
-          <WatchedMovie movie={movie} />
+          <WatchedMovie movie={movie} key={movie.imdbID} />
         ))}
       </ul>
     </>
