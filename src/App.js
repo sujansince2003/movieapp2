@@ -55,13 +55,15 @@ const average = (arr) =>
 const API_URL = "https://www.omdbapi.com/?apikey=35f704b1";
 const App = () => {
   const [movies, setMovies] = useState([]);
+  const [query, setQuery] = useState("");
   const [watched, setWatched] = useState([]);
   const [Errormsg, setErrormsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const searchMovies = async (title = "ifsdg") => {
+  const searchMovies = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${API_URL}&s=${title}`);
+      setErrormsg("");
+      const response = await fetch(`${API_URL}&s=${query}`);
       if (!response.ok) throw new Error("Something is wrong xD");
 
       const data = await response.json();
@@ -69,19 +71,25 @@ const App = () => {
       setMovies(data.Search);
       console.log(data.Search);
     } catch (err) {
-      alert(err.message);
       setErrormsg(err.message);
     } finally {
       setIsLoading(false);
     }
+    if (query.length <= 2) {
+      setMovies([]);
+      setErrormsg("");
+      return;
+    }
   };
-  useEffect(() => searchMovies, []);
+  useEffect(() => {
+    searchMovies();
+  }, [query]);
 
   return (
     <>
       <NavBar>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main movies={movies}>
@@ -128,8 +136,7 @@ const Logo = () => {
 };
 
 //search component
-const Search = () => {
-  const [query, setQuery] = useState("");
+const Search = ({ query, setQuery }) => {
   return (
     <input
       className="search"
