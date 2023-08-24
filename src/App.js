@@ -58,13 +58,14 @@ const App = () => {
   const [watched, setWatched] = useState([]);
   const [Errormsg, setErrormsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const searchMovies = async (title = "interstellar") => {
+  const searchMovies = async (title = "ifsdg") => {
     try {
       setIsLoading(true);
       const response = await fetch(`${API_URL}&s=${title}`);
       if (!response.ok) throw new Error("Something is wrong xD");
 
       const data = await response.json();
+      if (data.Response === "False") throw new Error("Movie not found");
       setMovies(data.Search);
       console.log(data.Search);
     } catch (err) {
