@@ -59,6 +59,8 @@ const App = () => {
   const [watched, setWatched] = useState([]);
   const [Errormsg, setErrormsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedId, setselectedId] = useState(null);
+
   const searchMovies = async () => {
     try {
       setIsLoading(true);
@@ -85,6 +87,14 @@ const App = () => {
     searchMovies();
   }, [query]);
 
+  function handleSelectedMovie(id) {
+    setselectedId((selectedId) => (id === selectedId ? null : id));
+  }
+
+  function handleCloseMovie() {
+    setselectedId(null);
+  }
+
   return (
     <>
       <NavBar>
@@ -95,13 +105,26 @@ const App = () => {
       <Main movies={movies}>
         <Box movies={movies}>
           {isLoading && <Loader />}
-          {!isLoading && !Errormsg && <MovieList movies={movies} />}
+          {!isLoading && !Errormsg && (
+            <MovieList
+              movies={movies}
+              handleSelectedMovie={handleSelectedMovie}
+            />
+          )}
           {Errormsg && <Errormessage message={Errormsg} />}
         </Box>
         <Box>
-          <WatchedSummary watched={watched} />
-
-          <WatchedList watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              handleCloseMovie={handleCloseMovie}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
       {/* <StarRating
@@ -189,21 +212,25 @@ const Box = ({ children }) => {
 };
 
 //Movies list
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies, handleSelectedMovie }) => {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {movies?.map((movie) => (
-        <Movie movie={movie} key={movie.imdbID} />
+        <Movie
+          movie={movie}
+          key={movie.imdbID}
+          handleSelectedMovie={handleSelectedMovie}
+        />
       ))}
     </ul>
   );
 };
 
 //movie
-const Movie = ({ movie }) => {
+const Movie = ({ movie, handleSelectedMovie }) => {
   return (
     <>
-      <li key={movie.imdbID}>
+      <li key={movie.imdbID} onClick={() => handleSelectedMovie(movie.imdbID)}>
         <img src={movie.Poster} alt={`${movie.Title} poster`} />
         <h3>{movie.Title}</h3>
         <div>
@@ -243,6 +270,19 @@ const Movie = ({ movie }) => {
 //     </>
 //   );
 // };
+
+//selectedmovie
+
+function MovieDetails({ selectedId, handleCloseMovie }) {
+  return (
+    <div className="details">
+      <button className="btn-back" onClick={handleCloseMovie}>
+        &larr;
+      </button>
+      {selectedId}
+    </div>
+  );
+}
 
 //watched summary
 
