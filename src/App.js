@@ -60,20 +60,26 @@ const App = () => {
   const [Errormsg, setErrormsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setselectedId] = useState(null);
+  const controller = new AbortController();
 
   const searchMovies = async () => {
     try {
       setIsLoading(true);
       setErrormsg("");
-      const response = await fetch(`${API_URL}&s=${query}`);
+      const response = await fetch(`${API_URL}&s=${query}`, {
+        signal: controller.signal,
+      });
       if (!response.ok) throw new Error("Something is wrong xD");
 
       const data = await response.json();
       if (data.Response === "False") throw new Error("Movie not found");
       setMovies(data.Search);
       console.log(data.Search);
+      setErrormsg("");
     } catch (err) {
-      setErrormsg(err.message);
+      if (err.name !== "AbortError") {
+        setErrormsg(err.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -83,8 +89,12 @@ const App = () => {
       return;
     }
   };
+
   useEffect(() => {
     searchMovies();
+    return function () {
+      controller.abort();
+    };
   }, [query]);
 
   function handleSelectedMovie(id) {
@@ -349,6 +359,22 @@ function MovieDetails({
       document.title = "Movie info";
     };
   }, [movie.Title]);
+
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          handleCloseMovie();
+          console.log("why");
+        }
+      }
+      document.addEventListener("keydown", callback);
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [handleCloseMovie]
+  );
 
   return (
     <div className="details">
