@@ -24,20 +24,22 @@ const StarContainerStyle=
     color="rgb(208, 208, 93)",
     size=48,className="",
     messages=[],
-    defaultRating=0
+    defaultRating=0,
+    onSetRating
 }) => {
     const [rating,setRating]=useState(defaultRating)
     const [tempRating,settempRating]=useState(0)
     function Handlerating(rating)
     {
         setRating(rating);
+        onSetRating(rating);
     }
     const textStyle=
     {
         lineHeight:"1",
         margin:"0",
         // color:`${color}`,
-        color:"black",
+        color:"yellow",
         fontSize:`${size/2}px`,
 
 
