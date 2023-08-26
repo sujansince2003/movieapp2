@@ -1,12 +1,16 @@
 Clearing fundamentals of react building movie app
 
 main concepts cleared with this project are:
+<ul>
+ 
+
 -Fetching data with API
 -Handling Errors
 -useEffect hooks and its dependencies
 -Cleaning up data fetching using AbortController()
 -synchronizing queries 
 -The useEffect Hooks cleanup function
+</ul>
 
 
 Features
