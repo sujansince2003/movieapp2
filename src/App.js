@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import Show from "./Show";
+import useKey from "./useKey";
 import { useLocalStorage } from "./useLocalStorage";
 
 const tempMovieData = [
@@ -407,21 +408,23 @@ function MovieDetails({
     };
   }, [movie.Title]);
 
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          handleCloseMovie();
-          console.log("why");
-        }
-      }
-      document.addEventListener("keydown", callback);
-      // return function () {
-      //   document.removeEventListener("keydown", callback);
-      // };
-    },
-    [handleCloseMovie]
-  );
+  useKey("Escape", handleCloseMovie);
+
+  // useEffect(
+  //   function () {
+  //     function callback(e) {
+  //       if (e.code === "Escape") {
+  //         handleCloseMovie();
+  //         console.log("why");
+  //       }
+  //     }
+  //     document.addEventListener("keydown", callback);
+  //     // return function () {
+  //     //   document.removeEventListener("keydown", callback);
+  //     // };
+  //   },
+  //   [handleCloseMovie]
+  // );
 
   return (
     <div className="details">
