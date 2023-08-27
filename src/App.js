@@ -56,11 +56,15 @@ const API_URL = "https://www.omdbapi.com/?apikey=35f704b1";
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState("");
-  const [watched, setWatched] = useState([]);
   const [Errormsg, setErrormsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setselectedId] = useState(null);
   const controller = new AbortController();
+  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    const storedValue = localStorage.getItem("watched");
+    return JSON.parse(storedValue);
+  });
 
   const searchMovies = async () => {
     try {
@@ -107,11 +111,21 @@ const App = () => {
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
+
+    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
+    // we will rather use this in useEffect
   }
 
   function handleDeleteWatchedMovie(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
+  );
 
   return (
     <>
