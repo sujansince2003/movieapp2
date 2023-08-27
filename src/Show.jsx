@@ -51,7 +51,7 @@ function TextExpander({
   <span>
   {text}
     </span>
-    <button onClick={()=>setisExpand((exp)=>!exp)} >{isExpand? collapseButtonText: expandButtonText}</button>
+    <button onClick={()=>setisExpand((exp)=>!exp)} > {isExpand? collapseButtonText: expandButtonText}</button>
   
   
   </div>;
